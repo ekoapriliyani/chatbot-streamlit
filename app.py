@@ -6,7 +6,7 @@ import google.generativeai as genai
 genai.configure(api_key="AIzaSyANKcW1bcGKcHBaaBlUPdUFKiTKER9acb0")
 
 # Load model
-model = genai.GenerativeModel("gemini-1.5-flash")
+model = genai.GenerativeModel("gemini-2.5-flash")
 
 st.set_page_config(page_title="Eko Chatbot", page_icon="🤖")
 st.title("🤖 Eko Chatbot")
