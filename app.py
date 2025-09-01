@@ -1,15 +1,15 @@
+import os
 import streamlit as st
 import google.generativeai as genai
-import os
 
-# Konfigurasi API
-genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+# Konfigurasi API pakai ENV variable
+genai.configure(api_key="AIzaSyANKcW1bcGKcHBaaBlUPdUFKiTKER9acb0")
 
 # Load model
 model = genai.GenerativeModel("gemini-1.5-flash")
 
-st.set_page_config(page_title="Chatbot Gemini", page_icon="🤖")
-st.title("🤖 Chatbot dengan Google Gemini")
+st.set_page_config(page_title="Eko Chatbot", page_icon="🤖")
+st.title("🤖 Eko Chatbot")
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
