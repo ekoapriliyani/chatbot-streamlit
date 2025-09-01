@@ -1,11 +1,10 @@
-import os
 import streamlit as st
 import google.generativeai as genai
 
-# Konfigurasi API pakai ENV variable
+# Konfigurasi API (langsung hardcode atau pakai ENV)
 genai.configure(api_key="AIzaSyANKcW1bcGKcHBaaBlUPdUFKiTKER9acb0")
 
-# Load model
+# Pakai model Gemini
 model = genai.GenerativeModel("gemini-2.5-flash")
 
 st.set_page_config(page_title="Eko Chatbot", page_icon="🤖")
@@ -14,7 +13,7 @@ st.title("🤖 Eko Chatbot")
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# Tampilkan chat history
+# Tampilkan history
 for msg in st.session_state.messages:
     with st.chat_message(msg["role"]):
         st.markdown(msg["content"])
@@ -27,9 +26,15 @@ if prompt := st.chat_input("Tulis pesan..."):
 
     with st.chat_message("assistant"):
         message_placeholder = st.empty()
+        full_response = ""
+
         try:
-            response = model.generate_content(prompt)
-            message_placeholder.markdown(response.text)
-            st.session_state.messages.append({"role": "assistant", "content": response.text})
+            # Mode streaming
+            for chunk in model.generate_content(prompt, stream=True):
+                if chunk.text:
+                    full_response += chunk.text
+                    message_placeholder.markdown(full_response + "▌")  # efek cursor
+            message_placeholder.markdown(full_response)
+            st.session_state.messages.append({"role": "assistant", "content": full_response})
         except Exception as e:
             message_placeholder.error(f"Error: {e}")
